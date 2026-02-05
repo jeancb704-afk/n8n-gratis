@@ -1,12 +1,11 @@
 FROM n8nio/n8n:latest
 
-USER root
-# Cria as pastas necessárias com permissões corretas
-RUN mkdir -p /home/node/.n8n && chown -R node:node /home/node/.n8n
-
-USER node
-# Porta padrão que o Render espera encontrar
+# O Render precisa da porta 10000
+ENV PORT=10000
 ENV N8N_PORT=10000
 
-# Comando usando o caminho absoluto do executável
-CMD ["/usr/local/bin/n8n", "start"]
+# Não vamos definir CMD nem ENTRYPOINT manual. 
+# Vamos deixar a imagem usar o dela, apenas mudando o usuário para garantir.
+USER root
+RUN mkdir -p /home/node/.n8n && chown -R node:node /home/node/.n8n
+USER node
